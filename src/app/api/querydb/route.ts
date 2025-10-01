@@ -1,8 +1,10 @@
 import { Client } from "pg";
 import { getSession } from "@/lib/session";
 
-// Basic SQL validation (checks for dangerous statements)
-function validateSQL(sql: string): boolean {
+const safeSQLMode = process.env.SAFE_SQL_MODE === 'true'
+
+const safeSQL = (sql: string): boolean => {
+  if (!safeSQLMode) { return true; }
   const forbidden = [
     /drop\s+table/i,
     /drop\s+database/i,
@@ -49,7 +51,7 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
-  if (!validateSQL(sql)) {
+  if (safeSQL(sql)) {
     return new Response(JSON.stringify({ error: "Unsafe SQL detected" }), {
       status: 400,
     });
