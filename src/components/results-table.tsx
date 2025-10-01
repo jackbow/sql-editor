@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/loading-spinner";
 import type { TableData } from "@/types";
 
 interface ResultsTableProps {
@@ -82,7 +83,14 @@ export const ResultsTable = ({
                 className="px-4 py-2 text-slate-400 border border-slate-200"
                 colSpan={tableData?.fields?.length ?? 1}
               >
-                {codeRunning ? "Running query..." : "No data"}
+                {codeRunning ? (
+                  <div className="flex items-center justify-center gap-2 py-4">
+                    <LoadingSpinner size="sm" />
+                    <span>Running query...</span>
+                  </div>
+                ) : (
+                  "No data"
+                )}
               </td>
             </tr>
           )}

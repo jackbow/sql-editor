@@ -5,12 +5,14 @@ import {
   type AssistantMessage,
   UserMessage,
 } from "@/components/chat-messages";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 interface ChatPanelProps {
   messages: (ModelMessage | AssistantMessage)[];
   onSendMessage: (message: string) => void;
   onRetry: () => void;
   onLoadToEditor: (query: string) => void;
+  isLoading?: boolean;
 }
 
 export const ChatPanel = ({
@@ -18,6 +20,7 @@ export const ChatPanel = ({
   onSendMessage,
   onRetry,
   onLoadToEditor,
+  isLoading = false,
 }: ChatPanelProps) => {
   const [userMessage, setUserMessage] = useState("");
 
@@ -36,6 +39,14 @@ export const ChatPanel = ({
         aria-label="Chat conversation"
         aria-live="polite"
       >
+        {isLoading && (
+          <div className="p-4 border-b border-slate-200">
+            <div className="flex items-center gap-2 text-slate-600">
+              <LoadingSpinner size="sm" />
+              <span>AI is thinking...</span>
+            </div>
+          </div>
+        )}
         {[...messages].reverse().map((message, i) => {
           const messageKey = `${message.role}-${i}-${typeof message.content === "string" ? message.content.slice(0, 50) : "structured"}`;
           if (message.role === "user")
@@ -90,8 +101,8 @@ export const ChatPanel = ({
           />
           <button
             type="button"
-            className="cursor-pointer ml-2 bg-green-500 text-white p-2 rounded-full hover:bg-green-600"
-            disabled={!userMessage.trim()}
+            className="cursor-pointer ml-2 bg-green-500 text-white p-2 rounded-full hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!userMessage.trim() || isLoading}
             onClick={handleSubmit}
             aria-label="Send message to AI"
           >

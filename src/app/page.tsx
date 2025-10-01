@@ -13,6 +13,7 @@ export default function Home() {
   const editorRef = useRef<QueryEditorRef>(null);
 
   const [codeRunning, setCodeRunning] = useState(false);
+  const [aiLoading, setAILoading] = useState(false);
   const [tableData, setTableData] = useState<TableData | undefined>(undefined);
   const [queryError, setQueryError] = useState<string | undefined>(undefined);
 
@@ -26,50 +27,55 @@ export default function Home() {
     } else if (options?.messages) {
       currentMessages = options.messages;
     }
-    const resp = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        messages: currentMessages
-          .filter(
-            (m) =>
-              !(
-                m.role === "assistant" &&
-                typeof m.content === "string" &&
-                m.content.startsWith("Error:")
-              ),
-          )
-          .slice(-10)
-          .map((m) =>
-            m.role === "assistant"
-              ? { ...m, content: JSON.stringify(m.content) }
-              : m,
-          ),
-      }),
-    });
-    if (!resp.ok) {
-      try {
-        const data = await resp.json();
-        setMessages([
-          ...currentMessages,
-          {
-            role: "assistant",
-            content: `Error: ${data.error || "Failed to get valid response from AI."}`,
-          },
-        ]);
-      } catch (_) {
-        setMessages([
-          ...currentMessages,
-          {
-            role: "assistant",
-            content: "Error: Failed to get valid response from AI.",
-          },
-        ]);
+    setAILoading(true);
+    try {
+      const resp = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: currentMessages
+            .filter(
+              (m) =>
+                !(
+                  m.role === "assistant" &&
+                  typeof m.content === "string" &&
+                  m.content.startsWith("Error:")
+                ),
+            )
+            .slice(-10)
+            .map((m) =>
+              m.role === "assistant"
+                ? { ...m, content: JSON.stringify(m.content) }
+                : m,
+            ),
+        }),
+      });
+      if (!resp.ok) {
+        try {
+          const data = await resp.json();
+          setMessages([
+            ...currentMessages,
+            {
+              role: "assistant",
+              content: `Error: ${data.error || "Failed to get valid response from AI."}`,
+            },
+          ]);
+        } catch (_) {
+          setMessages([
+            ...currentMessages,
+            {
+              role: "assistant",
+              content: "Error: Failed to get valid response from AI.",
+            },
+          ]);
+        }
+        return;
       }
-      return;
+      const data = await resp.json();
+      setMessages([...currentMessages, { role: "assistant", content: data }]);
+    } finally {
+      setAILoading(false);
     }
-    const data = await resp.json();
-    setMessages([...currentMessages, { role: "assistant", content: data }]);
   };
 
   const handleSendMessage = (message: string) => {
@@ -145,6 +151,7 @@ export default function Home() {
             onSendMessage={handleSendMessage}
             onRetry={handleRetry}
             onLoadToEditor={handleLoadToEditor}
+            isLoading={aiLoading}
           />
         </div>
       </div>
