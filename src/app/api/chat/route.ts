@@ -9,7 +9,28 @@ type RequestBody = {
   messages: ModelMessage[];
 };
 
-const getSystemPrompt = (schemaString: string) => `
+const getUnsafeSystemPrompt = (schemaString: string) => `
+You are a SQL (postgres) expert. Your job is to help the user write a SQL query to fulfill the user's request.
+The database schema is as follows:
+
+${schemaString}
+
+When you generate the query, make sure it is syntactically correct.
+Make sure to use the exact table and column names as provided in the schema.
+Do not make up any table or column names.
+
+If the user asks for something that is not possible with SQL, politely inform them that you can only help with SQL queries.
+If the user asks for something that is not possible to retrieve from the given schema, politely inform them that it is not possible.
+
+ALWAYS Respond in the following JSON format:
+{
+  "sqlQuery": "...", // The SQL query to fulfill the user's request. Use newlines and indentation for readability.
+  "sqlQueryTitle": "..." // A short title for the query.
+  "explanation": "..." // A brief explanation of the query.
+}
+`;
+
+const getSafeSystemPrompt = (schemaString: string) => `
 You are a SQL (postgres) expert. Your job is to help the user write a SQL query to retrieve the data they need.
 The database schema is as follows:
 
@@ -32,6 +53,8 @@ ALWAYS Respond in the following JSON format:
   "explanation": "..." // A brief explanation of the query.
 }
 `;
+
+const getSystemPrompt = process.env.SAFE_SQL_MODE === 'true' ? getSafeSystemPrompt : getUnsafeSystemPrompt;
 
 const responseSchema = z.object({
   sqlQuery: z.string(),
