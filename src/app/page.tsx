@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { AssistantMessage } from "@/components/chat-messages";
 import { ChatPanel } from "@/components/chat-panel";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { MonacoProvider } from "@/components/monaco-context";
 import { QueryEditor, type QueryEditorRef } from "@/components/query-editor";
 import { ResultsTable } from "@/components/results-table";
 import SettingsForm from "@/components/settings-form";
@@ -127,34 +128,36 @@ export default function Home() {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col h-screen bg-white relative">
-        <div className="absolute top-0 right-0 p-4 z-20">
-          <SettingsForm />
-        </div>
-        <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 flex flex-col border-r border-slate-200 min-w-0">
-            <QueryEditor
-              codeRunning={codeRunning}
-              onRunQuery={() => runSQL()}
-              ref={editorRef}
-            />
-            <div className="flex-1 overflow-auto">
-              <ResultsTable
-                tableData={tableData}
-                queryError={queryError}
-                codeRunning={codeRunning}
-              />
-            </div>
+      <MonacoProvider>
+        <div className="flex flex-col h-screen bg-white relative">
+          <div className="absolute top-0 right-0 p-4 z-20">
+            <SettingsForm />
           </div>
-          <ChatPanel
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            onRetry={handleRetry}
-            onLoadToEditor={handleLoadToEditor}
-            isLoading={aiLoading}
-          />
+          <div className="flex flex-1 overflow-hidden">
+            <div className="flex-1 flex flex-col border-r border-slate-200 min-w-0">
+              <QueryEditor
+                codeRunning={codeRunning}
+                onRunQuery={() => runSQL()}
+                ref={editorRef}
+              />
+              <div className="flex-1 overflow-auto">
+                <ResultsTable
+                  tableData={tableData}
+                  queryError={queryError}
+                  codeRunning={codeRunning}
+                />
+              </div>
+            </div>
+            <ChatPanel
+              messages={messages}
+              onSendMessage={handleSendMessage}
+              onRetry={handleRetry}
+              onLoadToEditor={handleLoadToEditor}
+              isLoading={aiLoading}
+            />
+          </div>
         </div>
-      </div>
+      </MonacoProvider>
     </ErrorBoundary>
   );
 }

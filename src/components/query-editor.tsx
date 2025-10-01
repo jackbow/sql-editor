@@ -9,6 +9,7 @@ import {
 } from "monacopilot";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { useMonaco } from "@/components/monaco-context";
 
 export interface QueryEditorProps {
   codeRunning: boolean;
@@ -33,6 +34,7 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
     const monacoRef = useRef<Monaco | undefined>(undefined);
     const editorRef = useRef<StandaloneCodeEditor | undefined>(undefined);
     const completionRef = useRef<CompletionRegistration | null>(null);
+    const { setMonaco } = useMonaco();
 
     const handleEditorDidMount = (
       editor: StandaloneCodeEditor,
@@ -41,6 +43,7 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
       editor.revealLine(1);
       monacoRef.current = monaco;
       editorRef.current = editor;
+      setMonaco(monaco);
       completionRef.current = registerCompletion(monaco, editor, {
         endpoint: "/api/completions",
         language: "sql",
