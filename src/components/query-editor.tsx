@@ -27,7 +27,7 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
     {
       codeRunning,
       onRunQuery,
-      defaultCode = "-- Write a SQL query to get started\n",
+      defaultCode = "-- Write an SQL query to get started. Command-Enter to run it.\n",
     },
     ref,
   ) => {
@@ -48,6 +48,10 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
         endpoint: "/api/completions",
         language: "sql",
       });
+      editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        () => onRunQuery(),
+      );
     };
 
     useEffect(() => {
