@@ -56,7 +56,6 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
       };
     }, []);
 
-    // Expose methods via imperative handle
     useImperativeHandle(ref, () => ({
       getEditorValue: () => editorRef.current?.getValue(),
       setEditorValue: (value: string) => {

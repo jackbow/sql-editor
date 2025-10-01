@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 
 export async function POST(req: Request) {
-  // Get session data for Mistral API key
   const session = await getSession();
   const mistralApiKey = session?.mistralApiKey || process.env.MISTRAL_API_KEY;
   const schemaString = session?.schema || "No schema provided";

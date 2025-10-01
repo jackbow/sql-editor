@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode, ErrorInfo } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { WarningIcon } from "@/components/icons";
 

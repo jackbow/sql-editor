@@ -1,5 +1,5 @@
-import { LoadingSpinner } from "@/components/loading-spinner";
 import { ErrorIcon } from "@/components/icons";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import type { TableData } from "@/types";
 
 interface ResultsTableProps {

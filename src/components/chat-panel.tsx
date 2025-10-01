@@ -5,8 +5,8 @@ import {
   type AssistantMessage,
   UserMessage,
 } from "@/components/chat-messages";
-import { LoadingSpinner } from "@/components/loading-spinner";
 import { SendIcon } from "@/components/icons";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 interface ChatPanelProps {
   messages: (ModelMessage | AssistantMessage)[];

@@ -38,7 +38,7 @@ export const fetchDatabaseSchema = async (
     isLocalhost || isIpAddress
       ? {
           rejectUnauthorized: false,
-          checkServerIdentity: () => undefined, // This is the key change
+          checkServerIdentity: () => undefined,
         }
       : {
           rejectUnauthorized: false,

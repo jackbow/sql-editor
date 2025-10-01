@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { mistralApiKey, postgresUrl }: UserSettings = body;
 
-    // Validate the input
     if (mistralApiKey !== undefined && typeof mistralApiKey !== "string") {
       return NextResponse.json(
         { error: "Invalid mistralApiKey" },
@@ -39,7 +38,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update session with new settings
     const updatedSettings = await updateSession({ mistralApiKey, postgresUrl });
 
     return NextResponse.json({

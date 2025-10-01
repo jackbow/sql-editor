@@ -27,8 +27,6 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const { sql } = await req.json();
-
-  // Get session data for PostgreSQL URL
   const session = await getSession();
   const postgresURL = session?.postgresUrl || process.env.POSTGRES_URL;
 
@@ -54,9 +52,15 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   if (!safeSQL(sql)) {
-    return new Response(JSON.stringify({ error: "Unsafe SQL detected" }), {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({
+        error:
+          "Unsafe SQL detected. No modifications to the data or database are allowed.",
+      }),
+      {
+        status: 400,
+      },
+    );
   }
 
   const client = new Client({ connectionString: postgresURL });

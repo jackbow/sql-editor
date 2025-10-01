@@ -21,7 +21,10 @@ export default function Home() {
   const [messages, setMessages] = useState<(ModelMessage | AssistantMessage)[]>(
     [],
   );
-  const askAI = async (options?: { retry?: boolean; messages?: (ModelMessage | AssistantMessage)[] }) => {
+  const askAI = async (options?: {
+    retry?: boolean;
+    messages?: (ModelMessage | AssistantMessage)[];
+  }) => {
     let currentMessages = [...messages];
     if (options?.retry) {
       currentMessages = currentMessages.slice(0, -1);

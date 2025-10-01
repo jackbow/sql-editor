@@ -1,6 +1,6 @@
-import { useMonaco } from "@/components/monaco-context";
-import { SqlIcon, PlayIcon, CopyIcon, CheckIcon } from "@/components/icons";
 import { useState } from "react";
+import { CheckIcon, CopyIcon, PlayIcon, SqlIcon } from "@/components/icons";
+import { useMonaco } from "@/components/monaco-context";
 
 interface SQLQueryDisplayProps {
   sqlQuery: string;
