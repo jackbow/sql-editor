@@ -17,7 +17,7 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
     postgresUrl: "",
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -30,12 +30,16 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
         if (response.ok) {
           const data = await response.json();
           setSettings(data);
-          if (!data.mistralApiKey || !data.postgresUrl) {
-            setIsOpen(true);
+          if (data.mistralApiKey && data.postgresUrl) {
+            setMessage("Settings loaded successfully!");
+            setTimeout(() => {
+              setIsOpen(false);
+              setMessage("");
+            }, 2000);
           }
         }
       } catch (error) {
-        console.error("Failed to load settings:", error);
+        console.error("Failed to load user settings:", error);
       }
     };
     loadSettingsOnMount();
@@ -171,11 +175,10 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
 
               {message && (
                 <div
-                  className={`p-3 rounded-md text-sm ${
-                    message.includes("successfully")
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                  className={`p-3 rounded-md text-sm ${message.includes("successfully")
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                    }`}
                 >
                   {message}
                 </div>
