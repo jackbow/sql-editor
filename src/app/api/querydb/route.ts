@@ -1,10 +1,12 @@
 import { Client } from "pg";
 import { getSession } from "@/lib/session";
 
-const safeSQLMode = process.env.SAFE_SQL_MODE === 'true'
+const safeSQLMode = process.env.SAFE_SQL_MODE === "true";
 
 const safeSQL = (sql: string): boolean => {
-  if (!safeSQLMode) { return true; }
+  if (!safeSQLMode) {
+    return true;
+  }
   const forbidden = [
     /drop\s+table/i,
     /drop\s+database/i,
@@ -15,7 +17,7 @@ const safeSQL = (sql: string): boolean => {
     /insert\s+into/i,
   ];
   return !forbidden.some((regex) => regex.test(sql));
-}
+};
 
 export async function POST(req: Request): Promise<Response> {
   if (req.method !== "POST") {

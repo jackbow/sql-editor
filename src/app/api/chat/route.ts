@@ -54,7 +54,10 @@ ALWAYS Respond in the following JSON format:
 }
 `;
 
-const getSystemPrompt = process.env.SAFE_SQL_MODE === 'true' ? getSafeSystemPrompt : getUnsafeSystemPrompt;
+const getSystemPrompt =
+  process.env.SAFE_SQL_MODE === "true"
+    ? getSafeSystemPrompt
+    : getUnsafeSystemPrompt;
 
 const responseSchema = z.object({
   sqlQuery: z.string(),
