@@ -10,7 +10,6 @@
     "format": "biome format --write"
   },
   "dependencies": {
-    "@ai-sdk/google": "^2.0.17",
     "@ai-sdk/mistral": "^2.0.17",
     "@ai-sdk/react": "^2.0.59",
     "@monaco-editor/react": "^4.7.0-rc.0",
@@ -24,8 +23,6 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "server-only": "^0.0.1",
-    "sql-highlight": "^3.3.5",
-    "swr": "^2.3.6",
     "zod": "^4.1.11"
   },
   "devDependencies": {
