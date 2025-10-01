@@ -25,14 +25,27 @@ export interface DatabaseSchema {
 /**
  * Fetches the complete database schema from a PostgreSQL database
  */
-export async function fetchDatabaseSchema(
+export const fetchDatabaseSchema = async (
   connectionString: string,
-): Promise<DatabaseSchema | null> {
+): Promise<DatabaseSchema | null> => {
+  const isLocalhost =
+    connectionString.includes("localhost") ||
+    connectionString.includes("127.0.0.1");
+  const matches = connectionString.match(/\/\/([^:/\s]+)/);
+  const hostname = matches?.[1] ?? "";
+  const isIpAddress = /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+  const sslConfig =
+    isLocalhost || isIpAddress
+      ? {
+          rejectUnauthorized: false,
+          checkServerIdentity: () => undefined, // This is the key change
+        }
+      : {
+          rejectUnauthorized: false,
+        };
   const client = new Client({
     connectionString,
-    ssl: connectionString.includes("localhost")
-      ? false
-      : { rejectUnauthorized: false },
+    ssl: sslConfig,
   });
 
   try {
@@ -153,12 +166,12 @@ export async function fetchDatabaseSchema(
   } finally {
     await client.end();
   }
-}
+};
 
 /**
  * Generates a human-readable schema string from the database schema
  */
-export function generateSchemaString(schema: DatabaseSchema): string {
+export const generateSchemaString = (schema: DatabaseSchema): string => {
   const lines: string[] = [];
 
   // Add tables
@@ -210,4 +223,4 @@ export function generateSchemaString(schema: DatabaseSchema): string {
   }
 
   return lines.join("\n");
-}
+};
