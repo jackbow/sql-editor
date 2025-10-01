@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SettingsIcon } from "@/components/icons";
 
 interface UserSettings {
   mistralApiKey?: string;
@@ -94,22 +95,7 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
         onClick={() => setIsOpen(!isOpen)}
         className={`px-2 py-2 cursor-pointer rounded-lg font-medium transition-colors bg-black text-white hover:bg-slate-800`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-settings-icon lucide-settings"
-        >
-          <title>settings</title>
-          <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+        <SettingsIcon />
       </button>
 
       {isOpen && (
@@ -175,11 +161,10 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
 
               {message && (
                 <div
-                  className={`p-3 rounded-md text-sm ${
-                    message.includes("successfully")
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
+                  className={`p-3 rounded-md text-sm ${message.includes("successfully")
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                    }`}
                 >
                   {message}
                 </div>
