@@ -51,7 +51,7 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
-  if (safeSQL(sql)) {
+  if (!safeSQL(sql)) {
     return new Response(JSON.stringify({ error: "Unsafe SQL detected" }), {
       status: 400,
     });
