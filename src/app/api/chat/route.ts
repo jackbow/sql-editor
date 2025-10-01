@@ -25,7 +25,7 @@ If the user asks for something that is not possible to retrieve from the given s
 ALWAYS Respond in the following JSON format:
 {
   "sqlQuery": "...", // The SQL query to fulfill the user's request. Use newlines and indentation for readability.
-  "sqlQueryTitle": "..." // A short title for the query.
+  "sqlQueryTitle": "..." // A short (< 45 characters) title for the query.
   "explanation": "..." // A brief explanation of the query.
 }
 `;
@@ -49,7 +49,7 @@ If the user asks for something that is not possible to retrieve from the given s
 ALWAYS Respond in the following JSON format:
 {
   "sqlQuery": "SELECT ...", // The SQL query to retrieve the data. Use newlines and indentation for readability.
-  "sqlQueryTitle": "..." // A short title for the query.
+  "sqlQueryTitle": "..." // A short (< 45 characters) title for the query.
   "explanation": "..." // A brief explanation of the query.
 }
 `;
@@ -61,7 +61,7 @@ const getSystemPrompt =
 
 const responseSchema = z.object({
   sqlQuery: z.string(),
-  sqlQueryTitle: z.string(),
+  sqlQueryTitle: z.string().max(45),
   explanation: z.string(),
 });
 
