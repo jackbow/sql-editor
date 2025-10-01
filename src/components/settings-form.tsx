@@ -59,7 +59,7 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
         setMessage("Settings saved successfully!");
         onSettingsUpdate?.(settings);
         setTimeout(() => setMessage(""), 3000);
-        setIsOpen(false)
+        setIsOpen(false);
       } else {
         setMessage("Failed to save settings");
       }
@@ -171,10 +171,11 @@ export default function SettingsForm({ onSettingsUpdate }: SettingsFormProps) {
 
               {message && (
                 <div
-                  className={`p-3 rounded-md text-sm ${message.includes("successfully")
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                    }`}
+                  className={`p-3 rounded-md text-sm ${
+                    message.includes("successfully")
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
                 >
                   {message}
                 </div>

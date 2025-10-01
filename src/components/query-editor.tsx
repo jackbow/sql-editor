@@ -79,7 +79,9 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
               "cursor-pointer bg-black disabled:opacity-40 disabled:cursor-progress text-white px-4 py-2 rounded-md",
             )}
             onClick={onRunQuery}
-            aria-label={codeRunning ? "Running SQL query, please wait" : "Run SQL query"}
+            aria-label={
+              codeRunning ? "Running SQL query, please wait" : "Run SQL query"
+            }
           >
             {codeRunning ? "Running..." : "Run query"}
           </button>

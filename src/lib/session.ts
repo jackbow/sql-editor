@@ -11,7 +11,9 @@ export interface UserSettings extends JWTPayload {
 
 const secretKey = process.env.SESSION_SECRET;
 if (!secretKey) {
-  throw new Error("SESSION_SECRET environment variable is not defined. This is required for secure session management.");
+  throw new Error(
+    "SESSION_SECRET environment variable is not defined. This is required for secure session management.",
+  );
 }
 const encodedKey = new TextEncoder().encode(secretKey);
 

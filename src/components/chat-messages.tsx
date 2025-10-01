@@ -4,8 +4,8 @@ import { SQLQueryDisplay } from "@/components/sql-query-display";
 export type AssistantMessage = {
   role: string;
   content:
-  | string
-  | { sqlQuery: string; sqlQueryTitle: string; explanation: string };
+    | string
+    | { sqlQuery: string; sqlQueryTitle: string; explanation: string };
 };
 
 interface UserMessageProps {
@@ -82,7 +82,7 @@ export const AIMessage = ({
         <SQLQueryDisplay
           sqlQuery={message.content.sqlQuery}
           sqlQueryTitle={message.content.sqlQueryTitle}
-          onLoadToEditor={onLoadToEditor || (() => { })}
+          onLoadToEditor={onLoadToEditor || (() => {})}
         />
         <p className="text-slate-800 text-sm">{message.content.explanation}</p>
       </div>

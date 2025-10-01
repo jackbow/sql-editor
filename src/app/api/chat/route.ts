@@ -44,7 +44,8 @@ export async function POST(req: Request) {
   const session = await getSession();
   const mistralApiKey = session?.mistralApiKey || process.env.MISTRAL_API_KEY;
   const postgresURL = session?.postgresUrl || process.env.POSTGRES_URL;
-  const schemaString = session?.schema || process.env.DB_SCHEMA || "No schema provided";
+  const schemaString =
+    session?.schema || process.env.DB_SCHEMA || "No schema provided";
 
   if (!mistralApiKey) {
     return NextResponse.json(

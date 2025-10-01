@@ -61,13 +61,10 @@ export const ResultsTable = ({
           {tableData?.rows?.length ? (
             tableData.rows.map((row, index) => {
               const firstField = tableData.fields[0];
-              const firstValue = firstField ? row[firstField.name] : '';
+              const firstValue = firstField ? row[firstField.name] : "";
               const rowKey = `row-${index}-${firstValue}`.slice(0, 50); // Limit length
               return (
-                <tr
-                  key={rowKey}
-                  className="border-t border-slate-100"
-                >
+                <tr key={rowKey} className="border-t border-slate-100">
                   {tableData.fields.map((field) => (
                     <td
                       key={field.name}
