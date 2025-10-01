@@ -19,66 +19,13 @@ export default function Home() {
   const [messages, setMessages] = useState<(ModelMessage | AssistantMessage)[]>(
     [],
   );
-  const askAI = async (retry = false) => {
-    if (retry) {
-      setMessages((messages) => messages.slice(0, -1));
+  const askAI = async (options?: { retry?: boolean; messages?: (ModelMessage | AssistantMessage)[] }) => {
+    let currentMessages = [...messages];
+    if (options?.retry) {
+      currentMessages = currentMessages.slice(0, -1);
+    } else if (options?.messages) {
+      currentMessages = options.messages;
     }
-    const resp = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        messages: messages
-          .filter(
-            (m) =>
-              !(
-                m.role === "assistant" &&
-                typeof m.content === "string" &&
-                m.content.startsWith("Error:")
-              ),
-          )
-          .slice(-10)
-          .map((m) =>
-            m.role === "assistant"
-              ? { ...m, content: JSON.stringify(m.content) }
-              : m,
-          ),
-      }),
-    });
-    if (!resp.ok) {
-      try {
-        const data = await resp.json();
-        setMessages([
-          ...messages,
-          {
-            role: "assistant",
-            content: `Error: ${data.error || "Failed to get valid response from AI."}`,
-          },
-        ]);
-      } catch (_) {
-        setMessages([
-          ...messages,
-          {
-            role: "assistant",
-            content: "Error: Failed to get valid response from AI.",
-          },
-        ]);
-      }
-      return;
-    }
-    const data = await resp.json();
-    setMessages([...messages, { role: "assistant", content: data }]);
-  };
-
-  const handleSendMessage = (message: string) => {
-    const newMessages = [...messages, { role: "user", content: message }];
-    setMessages(newMessages);
-    // Use the updated messages for the AI call
-    askAIWithMessages(newMessages);
-  };
-
-  const askAIWithMessages = async (
-    currentMessages: (ModelMessage | AssistantMessage)[],
-  ) => {
     const resp = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -125,6 +72,14 @@ export default function Home() {
     setMessages([...currentMessages, { role: "assistant", content: data }]);
   };
 
+  const handleSendMessage = (message: string) => {
+    const newMessages = [...messages, { role: "user", content: message }];
+    setMessages(newMessages);
+    askAI({ messages: newMessages });
+  };
+
+  const handleRetry = () => askAI({ retry: true });
+
   const runSQL = (query?: string) => {
     if (!query && !editorRef.current) {
       return;
@@ -163,8 +118,6 @@ export default function Home() {
       editorRef.current.setEditorValue(query);
     }
   };
-
-  const handleRetry = () => askAI(true);
 
   return (
     <ErrorBoundary>
