@@ -73,6 +73,7 @@ export const QueryEditor = forwardRef<QueryEditorRef, QueryEditorProps>(
       <div className="flex-1 bg-slate-50 relative">
         <Editor
           defaultLanguage="sql"
+          options={{ minimap: { enabled: false } }}
           onMount={handleEditorDidMount}
           defaultValue={defaultCode}
           line={100}
